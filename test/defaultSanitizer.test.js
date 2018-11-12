@@ -66,13 +66,10 @@ describe('when sanatizing using the default sanatizer', () => {
 
     const actual = sanatizeAndEncode('key', ['value1', 'value2']);
 
-    expect(actual[0]).toBe('encoded-sanatized-value1');
-    expect(actual[1]).toBe('encoded-sanatized-value2');
+    expect(actual[0]).toBe('sanatized-value1');
+    expect(actual[1]).toBe('sanatized-value2');
     expect(sanitize.mock.calls).toHaveLength(2);
     expect(sanitize.mock.calls[0][0]).toBe('value1');
     expect(sanitize.mock.calls[1][0]).toBe('value2');
-    expect(htmlEncode.mock.calls).toHaveLength(2);
-    expect(htmlEncode.mock.calls[0][0]).toBe('sanatized-value1');
-    expect(htmlEncode.mock.calls[1][0]).toBe('sanatized-value2');
   });
 });
