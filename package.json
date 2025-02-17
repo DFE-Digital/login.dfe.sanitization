@@ -45,7 +45,6 @@
     "clearMocks": true
   },
   "dependencies": {
-    "htmlencode": "0.0.4",
     "sanitizer": "^0.1.3"
   }
 }
