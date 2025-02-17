@@ -1,7 +1,7 @@
 name: $(BuildDefinitionName)_tag-$(BuildID)_at-$(Date:yyyyMMdd)$(Rev:.r)
 resources:
   repositories:
-  # Defult branch is master
+    # Defult branch is master
     - repository: devopsTemplates
       type: github
       endpoint: DfE-Digital
@@ -11,25 +11,23 @@ resources:
 trigger:
   branches:
     include:
-    - feature/*
+      - feature/*
 
 pr:
   branches:
     include:
-    - main
+      - main
 
 variables:
-- group: dsi-global
-
+  - group: dsi-global
 
 stages:
-
-# Code Scans
-- stage: Codescan
-  displayName: "Scan tools"
-  jobs:
-
-  - template:  pipeline/scanTools.yml@devopsTemplates
-    parameters:
-      npmInstCmd: 'install --force --json --no-package-lock'
-      AppDeploy: true
+  # Code Scans
+  - stage: Codescan
+    displayName: "Scan tools"
+    jobs:
+      - template: pipeline/scanTools.yml@devopsTemplates
+        parameters:
+          npmInstCmd: "install --force --json --no-package-lock"
+          AppDeploy: true
+          useRevisedLinting: true
