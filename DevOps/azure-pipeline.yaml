@@ -1,7 +1,6 @@
 name: $(BuildDefinitionName)_tag-$(BuildID)_at-$(Date:yyyyMMdd)$(Rev:.r)
 resources:
   repositories:
-    # Defult branch is master
     - repository: devopsTemplates
       type: github
       endpoint: DfE-Digital
@@ -11,23 +10,27 @@ resources:
 trigger:
   branches:
     include:
-      - feature/*
+      - "*"
 
-pr:
-  branches:
-    include:
-      - main
+pr: none
 
 variables:
   - group: dsi-global
 
 stages:
-  # Code Scans
-  - stage: Codescan
-    displayName: "Scan tools"
+  - stage: prepare
+    displayName: Prepare
     jobs:
-      - template: pipeline/scanTools.yml@devopsTemplates
+      - template: pipeline/node-project/checks.yml@devopsTemplates
         parameters:
-          npmInstCmd: "install --force --json --no-package-lock"
-          AppDeploy: true
-          useRevisedLinting: true
+          nodeVersionSpec: 22.14.0
+
+  - stage: publishPackage
+    displayName: Publish Package
+    dependsOn:
+      - prepare
+    condition: in(dependencies.prepare.result, 'Succeeded', 'Skipped')
+    jobs:
+      - template: pipeline/node-project/publishPackage.yml@devopsTemplates
+        parameters:
+          nodeVersionSpec: 22.14.0
